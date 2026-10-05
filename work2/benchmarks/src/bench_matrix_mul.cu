@@ -1,4 +1,5 @@
 #include <Eigen/Dense>
+#include <algorithm>
 #include <benchmark/benchmark.h>
 #include <cuda_runtime.h>
 #include <vector>
@@ -38,13 +39,14 @@ static void BM_CUDA_MatMul_Naive(benchmark::State& state) {
 
     float elapsed_ms = 0.0f;
     CUDA_CHECK(cudaEventElapsedTime(&elapsed_ms, start, stop));
-    state.SetIterationTime(elapsed_ms / 1000.0f);
+
+    const float safe_ms = std::max(elapsed_ms, 0.0001f);
+    state.SetIterationTime(safe_ms / 1000.0f);
   }
 
   CUDA_CHECK(cudaEventDestroy(start));
   CUDA_CHECK(cudaEventDestroy(stop));
 
-  // Вычислительная работа: 2 * n^3 FLOPs
   state.SetItemsProcessed(static_cast<int64_t>(state.iterations()) * 2 * n * n * n);
 }
 
@@ -57,6 +59,7 @@ static void BM_Eigen_MatMul(benchmark::State& state) {
   RowMajorMatrixXf c(n, n);
 
   for (auto _ : state) {
+    // noalias() исключает создание промежуточных матриц в динамической памяти
     c.noalias() = a * b;
     benchmark::DoNotOptimize(c.data());
   }
