@@ -54,8 +54,8 @@ static void BM_CUDA_MatMul_Naive(benchmark::State& state) {
 static void BM_Eigen_MatMul(benchmark::State& state) {
   const auto n = static_cast<Eigen::Index>(state.range(0));
 
-  RowMajorMatrixXf a = RowMajorMatrixXf::Random();
-  RowMajorMatrixXf b = RowMajorMatrixXf::Random();
+  RowMajorMatrixXf a = RowMajorMatrixXf::Random(n, n);
+  RowMajorMatrixXf b = RowMajorMatrixXf::Random(n, n);
   RowMajorMatrixXf c(n, n);
 
   for (auto _ : state) {
