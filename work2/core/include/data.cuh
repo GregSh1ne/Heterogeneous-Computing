@@ -14,12 +14,14 @@ class Data {
   explicit Data(std::size_t size)
       : size_(size)
       , data_(nullptr) {
-    if (size_ > 0) {
+    if (size_ > 0)
       CUDA_CHECK(cudaMalloc(reinterpret_cast<void**>(&data_), size_ * sizeof(AtomT)));
-    }
   }
 
-  // Глубокое копирование
+  ~Data() {
+    if (data_ != nullptr) cudaFree(data_);
+  }
+
   Data(const Data& other)
       : size_(other.size_)
       , data_(nullptr) {
@@ -30,7 +32,6 @@ class Data {
     }
   }
 
-  // Перемещение
   Data(Data&& other) noexcept
       : size_(other.size_)
       , data_(other.data_) {
@@ -40,38 +41,30 @@ class Data {
 
   Data& operator=(const Data& other) {
     if (this != &other) {
-      if (data_ != nullptr) {
-        CUDA_CHECK(cudaFree(data_));
-        data_ = nullptr;
+      if (size_ != other.size_) {
+        if (data_ != nullptr) {
+          CUDA_CHECK(cudaFree(data_));
+          data_ = nullptr;
+        }
+        size_ = other.size_;
+        if (size_ > 0)
+          CUDA_CHECK(cudaMalloc(reinterpret_cast<void**>(&data_), size_ * sizeof(AtomT)));
       }
-      size_ = other.size_;
-      if (size_ > 0) {
-        CUDA_CHECK(cudaMalloc(reinterpret_cast<void**>(&data_), size_ * sizeof(AtomT)));
+      if (size_ > 0)
         CUDA_CHECK(cudaMemcpy(
             data_, other.data_, size_ * sizeof(AtomT), cudaMemcpyDeviceToDevice));
-      }
     }
     return *this;
   }
 
   Data& operator=(Data&& other) noexcept {
-    if (this == &other) return *this;
+    if (this != &other) return *this;
 
     if (data_ != nullptr) cudaFree(data_);
     size_ = other.size_;
     data_ = other.data_;
     other.size_ = 0;
     other.data_ = nullptr;
-
-    return *this;
-  }
-
-  return *this;
-
-  ~Data() {
-    if (data_ != nullptr) {
-      cudaFree(data_);
-    }
   }
 
   [[nodiscard]] AtomT* data() noexcept {
