@@ -65,6 +65,8 @@ class Data {
     data_ = other.data_;
     other.size_ = 0;
     other.data_ = nullptr;
+
+    return *this;
   }
 
   [[nodiscard]] AtomT* data() noexcept {

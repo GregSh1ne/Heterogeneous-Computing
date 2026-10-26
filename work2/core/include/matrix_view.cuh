@@ -40,7 +40,6 @@ class MatrixView {
     return data_;
   }
 
-  // Линейный доступ по индексу
   __host__ __device__ [[nodiscard]] AtomT& operator[](std::size_t n) noexcept {
     return data_[n];
   }
@@ -50,7 +49,6 @@ class MatrixView {
     return data_[n];
   }
 
-  // Двумерный доступ row-major: data_[i * ncols_ + j]
   __host__ __device__ [[nodiscard]] AtomT& operator()(
       std::size_t i, std::size_t j) noexcept {
     return data_[i * ncols_ + j];

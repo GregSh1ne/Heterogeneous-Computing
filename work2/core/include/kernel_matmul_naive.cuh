@@ -11,13 +11,11 @@ __global__ void kernel_matmul_naive(
 
   if (row < c.nrows() && col < c.ncols()) {
     AtomT sum = static_cast<AtomT>(0);
-    const std::size_t k_len = a.ncols();  // или b.nrows()
+    const std::size_t k_len = a.ncols();
 
-#pragma unroll 4
     for (std::size_t p = 0; p < k_len; ++p) {
       sum += a(row, p) * b(p, col);
     }
-
     c(row, col) = sum;
   }
 }
