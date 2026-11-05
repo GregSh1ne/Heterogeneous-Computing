@@ -1,5 +1,4 @@
-#ifndef WORK3_CORE_MATRIX_CUH_
-#define WORK3_CORE_MATRIX_CUH_
+#pragma once
 
 #include <memory>
 #include <stdexcept>
@@ -81,6 +80,4 @@ class Matrix {
     default_strategy_->Multiply(a.view(), b.view(), c.view());
     return c;
   }
-};
-
-#endif  // WORK3_CORE_MATRIX_CUH_
+};  // WORK3_CORE_MATRIX_CUH_

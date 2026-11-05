@@ -1,5 +1,4 @@
-#ifndef WORK3_CORE_KERNEL_MATMUL_SHMEM_CUH_
-#define WORK3_CORE_KERNEL_MATMUL_SHMEM_CUH_
+#pragma once
 
 #include "matrix_view.cuh"
 #include <cuda_runtime.h>
@@ -40,16 +39,13 @@ __global__ void kernel_matmul_shmem(
     } else {
       s_b[ty][tx] = static_cast<AtomT>(0);
     }
-
     // Барьерная синхронизация: ждём завершения загрузки тайла ВСЕМИ нитями блока
     __syncthreads();
 
-// 3. Вычисление скалярного произведения в быстром кэше
-#pragma unroll
+    // 3. Вычисление скалярного произведения в быстром кэше
     for (unsigned int k = 0; k < kTileSize; ++k) {
       sum += s_a[ty][k] * s_b[k][tx];
     }
-
     // Барьерная синхронизация: исключаем перезапись тайла до завершения расчетов всеми
     // нитями
     __syncthreads();
@@ -59,6 +55,4 @@ __global__ void kernel_matmul_shmem(
   if (row < c.nrows() && col < c.ncols()) {
     c(row, col) = sum;
   }
-}
-
-#endif  // WORK3_CORE_KERNEL_MATMUL_SHMEM_CUH_
+}  // WORK3_CORE_KERNEL_MATMUL_SHMEM_CUH_

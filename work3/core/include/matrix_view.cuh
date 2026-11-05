@@ -1,5 +1,4 @@
-#ifndef WORK3_CORE_MATRIX_VIEW_CUH_
-#define WORK3_CORE_MATRIX_VIEW_CUH_
+#pragma once
 
 #include <cstddef>
 #include <cuda_runtime.h>
@@ -62,4 +61,4 @@ class MatrixView {
 static_assert(std::is_trivially_copyable_v<MatrixView<float>>,
     "MatrixView must be trivially copyable to pass by value into CUDA kernels");
 
-#endif  // WORK3_CORE_MATRIX_VIEW_CUH_
+// WORK3_CORE_MATRIX_VIEW_CUH_

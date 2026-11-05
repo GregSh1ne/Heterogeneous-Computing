@@ -7,7 +7,7 @@
 #include "matmul_strategy.cuh"
 #include "matrix.cuh"
 
-// Бенчмарк блочного умножения с Shared Memory (Работа №3)
+// Бенчмарк блочного умножения с Shared Memory
 static void BM_CUDA_Matmul_SharedMemory(benchmark::State& state) {
   const std::size_t n = static_cast<std::size_t>(state.range(0));
 
@@ -46,7 +46,7 @@ static void BM_CUDA_Matmul_SharedMemory(benchmark::State& state) {
       static_cast<int64_t>(state.iterations()) * static_cast<int64_t>(2 * n * n * n));
 }
 
-// Бенчмарк наивного умножения (Работа №2)
+// Бенчмарк наивного умножения
 static void BM_CUDA_Matmul_Naive(benchmark::State& state) {
   const std::size_t n = static_cast<std::size_t>(state.range(0));
 

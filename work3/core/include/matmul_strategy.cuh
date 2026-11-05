@@ -1,5 +1,4 @@
-#ifndef WORK3_CORE_MATMUL_STRATEGY_CUH_
-#define WORK3_CORE_MATMUL_STRATEGY_CUH_
+#pragma once
 
 #include "cuda_check.cuh"
 #include "kernel_matmul_naive.cuh"
@@ -16,7 +15,7 @@ class IMatmulStrategy {
       = 0;
 };
 
-// Стратегия умножения на базе наивного ядра (Работа №2)
+// Стратегия умножения на базе наивного ядра
 template <typename AtomT>
 class NaiveMatmulStrategy : public IMatmulStrategy<AtomT> {
  public:
@@ -34,7 +33,7 @@ class NaiveMatmulStrategy : public IMatmulStrategy<AtomT> {
   }
 };
 
-// Стратегия блочного умножения с разделяемой памятью (Работа №3)
+// Стратегия блочного умножения с разделяемой памятью
 template <typename AtomT>
 class SharedMemoryMatmulStrategy : public IMatmulStrategy<AtomT> {
  public:
@@ -50,6 +49,4 @@ class SharedMemoryMatmulStrategy : public IMatmulStrategy<AtomT> {
     CUDA_CHECK_LAST_ERROR();
     CUDA_CHECK(cudaDeviceSynchronize());
   }
-};
-
-#endif  // WORK3_CORE_MATMUL_STRATEGY_CUH_
+};  // WORK3_CORE_MATMUL_STRATEGY_CUH_

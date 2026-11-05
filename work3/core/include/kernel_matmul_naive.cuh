@@ -1,5 +1,4 @@
-#ifndef WORK3_CORE_KERNEL_MATMUL_NAIVE_CUH_
-#define WORK3_CORE_KERNEL_MATMUL_NAIVE_CUH_
+#pragma once
 
 #include "matrix_view.cuh"
 #include <cuda_runtime.h>
@@ -18,6 +17,4 @@ __global__ void kernel_matmul_naive(
     }
     c(row, col) = sum;
   }
-}
-
-#endif  // WORK3_CORE_KERNEL_MATMUL_NAIVE_CUH_
+}  // WORK3_CORE_KERNEL_MATMUL_NAIVE_CUH_

@@ -1,5 +1,4 @@
-#ifndef WORK3_CORE_DATA_CUH_
-#define WORK3_CORE_DATA_CUH_
+#pragma once
 
 #include "cuda_check.cuh"
 #include <cstddef>
@@ -102,6 +101,4 @@ class Data {
           cudaMemcpy(data_, host_ptr, size_ * sizeof(AtomT), cudaMemcpyHostToDevice));
     }
   }
-};
-
-#endif  // WORK3_CORE_DATA_CUH_
+};  // WORK3_CORE_DATA_CUH_

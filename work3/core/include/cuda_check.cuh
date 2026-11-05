@@ -1,5 +1,4 @@
-#ifndef WORK3_CORE_CUDA_CHECK_CUH_
-#define WORK3_CORE_CUDA_CHECK_CUH_
+#pragma once
 
 #include <cuda_runtime.h>
 #include <stdexcept>
@@ -25,5 +24,4 @@
     }                                                                                    \
   }                                                                                      \
   while (0)
-
-#endif  // WORK3_CORE_CUDA_CHECK_CUH_
+// WORK3_CORE_CUDA_CHECK_CUH_
