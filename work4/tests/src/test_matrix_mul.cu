@@ -7,6 +7,8 @@
 #include <random>
 #include <tuple>
 
+#include "cuda_check.cuh"
+#include "matmul_strategy.cuh"
 #include "matrix.cuh"
 
 using EigenHalfMatrix
@@ -55,7 +57,8 @@ TEST_P(WmmaMatmulParameterizedTest, MatchesEigenHalfReference) {
   Matrix<__half> d_c = d_a * d_b;
   d_c.data().copy_to_host(reinterpret_cast<__half*>(h_c.data()));
 
-  const EigenHalfMatrix expected_half = h_a * h_b;
+  const EigenHalfMatrix expected_half
+      = (h_a.cast<float>() * h_b.cast<float>()).cast<Eigen::half>();
   const Eigen::MatrixXf expected = expected_half.cast<float>();
   const Eigen::MatrixXf actual = h_c.cast<float>();
 
