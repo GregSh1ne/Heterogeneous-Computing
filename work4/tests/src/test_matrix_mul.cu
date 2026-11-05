@@ -1,3 +1,4 @@
+#define EIGEN_DONT_VECTORIZE
 #include <cuda_fp16.h>
 #include <gtest/gtest.h>
 
@@ -8,17 +9,17 @@
 
 #include "matrix.cuh"
 
-using EigenHalfMatrix =
-    Eigen::Matrix<Eigen::half, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
-using EigenFloatMatrix =
-    Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+using EigenHalfMatrix
+    = Eigen::Matrix<Eigen::half, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+using EigenFloatMatrix
+    = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
 static_assert(sizeof(Eigen::half) == sizeof(__half),
-              "Eigen::half and CUDA __half must have identical size (2 bytes)");
+    "Eigen::half and CUDA __half must have identical size (2 bytes)");
 
 class WmmaMatmulParameterizedTest
-    : public ::testing::TestWithParam<
-          std::tuple<std::size_t, std::size_t, std::size_t>> {};
+    : public ::testing::TestWithParam<std::tuple<std::size_t, std::size_t, std::size_t>> {
+};
 
 TEST_P(WmmaMatmulParameterizedTest, MatchesEigenHalfReference) {
   const auto [m, k, n] = GetParam();
@@ -34,15 +35,15 @@ TEST_P(WmmaMatmulParameterizedTest, MatchesEigenHalfReference) {
 
   for (std::size_t i = 0; i < m; ++i) {
     for (std::size_t j = 0; j < k; ++j) {
-      h_a(static_cast<Eigen::Index>(i), static_cast<Eigen::Index>(j)) =
-          Eigen::half(dist(gen));
+      h_a(static_cast<Eigen::Index>(i), static_cast<Eigen::Index>(j))
+          = Eigen::half(dist(gen));
     }
   }
 
   for (std::size_t i = 0; i < k; ++i) {
     for (std::size_t j = 0; j < n; ++j) {
-      h_b(static_cast<Eigen::Index>(i), static_cast<Eigen::Index>(j)) =
-          Eigen::half(dist(gen));
+      h_b(static_cast<Eigen::Index>(i), static_cast<Eigen::Index>(j))
+          = Eigen::half(dist(gen));
     }
   }
 
@@ -61,10 +62,9 @@ TEST_P(WmmaMatmulParameterizedTest, MatchesEigenHalfReference) {
   EXPECT_TRUE(actual.isApprox(expected, 1e-2f));
 }
 
-INSTANTIATE_TEST_SUITE_P(
-    WmmaDimensions, WmmaMatmulParameterizedTest,
-    ::testing::Combine(
-        ::testing::Values(16, 32, 64, 128, 256, 512),
+INSTANTIATE_TEST_SUITE_P(WmmaDimensions,
+    WmmaMatmulParameterizedTest,
+    ::testing::Combine(::testing::Values(16, 32, 64, 128, 256, 512),
         ::testing::Values(16, 32, 64, 128, 256, 512),
         ::testing::Values(16, 32, 64, 128, 256, 512)));
 
